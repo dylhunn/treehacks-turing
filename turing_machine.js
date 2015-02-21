@@ -1,78 +1,76 @@
-(function(window, document, undefined) {
+var DirectionEnum = { RIGHT: "r", LEFT: "l" };
 
-  var DirectionEnum = { RIGHT: "r", LEFT: "l" };
+var TuringMachine = function() {
+  this.states = {};
+  this.startStateName = undefined;
+  this.currentStateName = undefined;
+  this.tape = undefined;
+  this.steps = 0;
+}
 
-  var TuringMachine = function() {
-    this.states = {};
-    this.startStateName = undefined;
-    this.currentStateName = undefined;
-    this.tape = undefined;
-    this.steps = 0;
-  }
+TuringMachine.prototype.addState = function(stateToAdd) {
+  this.states[stateToAdd.name] = stateToAdd;
+}
 
-  TuringMachine.prototype.addState = function(stateToAdd) {
-    this.states[stateToAdd.name] = stateToAdd;
-  }
+TuringMachine.prototype.getState = function(nameToGet){
+  return this.states[nameToGet];
+}
 
-  TuringMachine.prototype.getState = function(nameToGet){
-    return this.states[nameToGet];
-  }
+TuringMachine.prototype.setStart = function(nameOfStarting){ // TODO: what if start does not exist?
+  this.startStateName = nameOfStarting;
+}
 
-  TuringMachine.prototype.setStart = function(nameOfStarting){ // TODO: what if start does not exist?
-    this.startStateName = nameOfStarting;
-  }
+TuringMachine.prototype.initialize = function(input) {
+  this.steps = 0;
+  this.currentStateName = this.startStateName;
+  this.tape = new Tape();
+  this.tape.setInput(input);
+}
 
-  TuringMachine.prototype.initialize = function(input) {
-    this.steps = 0;
-    this.currentStateName = this.startStateName;
-    this.tape = new Tape();
-    this.tape.setInput(input);
-  }
+TuringMachine.prototype.step = function() {
+  var currentState = this.getState(this.currentStateName);
+  var currentSymbol = this.tape.read();
+  var transition = currentState.transitions[currentSymbol];
+  if (transition == undefined) return false;
+  this.currentStateName = transition.destination;
+  this.tape.write(transition.write);
+  if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
+  else this.tape.moveLeft();
+}
 
-  TuringMachine.prototype.step = function() {
-    var currentState = this.getState(this.currentStateName);
-    var currentSymbol = this.tape.read();
-    var transition = currentState.transitions[currentSymbol];
-    if (transition == undefined) return false;
-    this.currentStateName = transition.destination;
-    this.tape.write(transition.write);
-    if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
-    else this.type.moveLeft();
-  }
-
-  TuringMachine.buildMachine = function(lines) {
-    var machine = new TuringMachine();
-    lines.forEach(function(line) {
-      if (/^#.*$/.test(line)) return;
-      var regex = /^(.*)\s(.)\s(.)\s(l|r)\s(.*)$/;    // TODO: add support for arbitrary spacing
-      if (regex.test(line)) {
-        var match = line.match(regex);
-        var stateName = match[1];
-        if (machine.states[stateName] == undefined) {
-          machine.addState(new State(stateName));
-        }
-        if (machine.startStateName == undefined) {
-          machine.startStateName = stateName;
-        }
-        machine.states[stateName].addTransition(match[2].trim(), match[3], match[4], match[5]);
-        if (machine.states[match[5]] == undefined) {
-          machine.addState(new State(match[5]));
-          console.log("adding the state " + match[5]);
-        }
+TuringMachine.buildMachine = function(lines) {
+  var machine = new TuringMachine();
+  lines.forEach(function(line) {
+    if (/^#.*$/.test(line)) return;
+    var regex = /^(.*)\s(.)\s(.)\s(l|r)\s(.*)$/;    // TODO: add support for arbitrary spacing
+    if (regex.test(line)) {
+      var match = line.match(regex);
+      var stateName = match[1];
+      if (machine.states[stateName] == undefined) {
+        machine.addState(new State(stateName));
       }
-      var haltRegex = /^(.*)\s:\s(0|1)/;
-      if (haltRegex.test(line)) {
-        var match = line.match(haltRegex);
-        console.log(match[1])
-        machine.states[match[1]].setType(parseInt(match[2]));
+      if (machine.startStateName == undefined) {
+        machine.startStateName = stateName;
       }
-    });
-    return machine;
-  }
+      machine.states[stateName].addTransition(match[2].trim(), match[3], match[4], match[5]);
+      if (machine.states[match[5]] == undefined) {
+        machine.addState(new State(match[5]));
+        console.log("adding the state " + match[5]);
+      }
+    }
+    var haltRegex = /^(.*)\s:\s(0|1)/;
+    if (haltRegex.test(line)) {
+      var match = line.match(haltRegex);
+      console.log(match[1])
+      machine.states[match[1]].setType(parseInt(match[2]));
+    }
+  });
+  return machine;
+}
 
-  window.TuringMachine = TuringMachine;
+// window.TuringMachine = TuringMachine;
 
-})(this, this.document);
+
 
 
 // class TuringMachine

@@ -33,7 +33,6 @@ function initTuringMachine() {
     return lineview.text.innerText;
   });
   machine = TuringMachine.buildMachine(lines);
-  drawTape();
 }
 
 var TAPE_SIZE = 45;
@@ -83,6 +82,7 @@ document.getElementById("startBtn").onclick = function() {
   var inputStr = document.getElementById("tapeinput").value;
   // load input
   machine.initialize(inputStr);
+  drawTape();
 }
 
 document.getElementById("pauseBtn").onclick = function() {
