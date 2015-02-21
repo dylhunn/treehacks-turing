@@ -24,7 +24,7 @@
 
   TuringMachine.prototype.initialize = function(input) {
     this.steps = 0;
-    this.currentState = this.startState;
+    this.currentStateName = this.startStateName;
     this.tape = new Tape();
     this.tape.setInput(input);
   }
@@ -46,22 +46,23 @@
     var machine = new TuringMachine();
     lines.forEach(function(line) {
       if (/^#.*$/.test(line)) return;
-      var regex = /^(.*)\s(.)\s(.)\s(l|r)\s(.*)$/;
+      var regex = /^(.*)\s(.)\s(.)\s(l|r)\s(.*)$/;    // TODO: add support for arbitrary spacing
       if (regex.test(line)) {
         var match = line.match(regex);
         var stateName = match[1];
         if (machine.states[stateName] == undefined) {
           machine.addState(new State(stateName));
         }
-        machine.states[stateName].addTransition(match[2], match[3], match[4], match[5]);
+        machine.states[stateName].addTransition(match[2].trim(), match[3], match[4], match[5]);
         if (machine.states[match[5]] == undefined) {
           machine.addState(new State(match[5]));
           console.log("adding the state " + match[5]);
         }
       }
-      var haltRegex = /^(.*)\s*:\s*(0|1)/;
+      var haltRegex = /^(.*)\s:\s(0|1)/;
       if (haltRegex.test(line)) {
         var match = line.match(haltRegex);
+        console.log(match[1])
         machine.states[match[1]].setType(parseInt(match[2]));
       }
     });

@@ -16,18 +16,23 @@ var editor = CodeMirror.fromTextArea(textarea, {
   lineNumbers: true
 });
 
-editor.on("change", function(event) {
-  // tm = TuringMachine.buildMachine();
-  // console.log(event.display.input.value);
-  var lines = event.display.view.map(function(lineview) {
+
+// editor.on("change", function(event) {
+//   // tm = TuringMachine.buildMachine();
+//   // console.log(event.display.input.value);
+//   initTuringMachine();
+//   console.log(tm);
+// });
+
+function initTuringMachine() {
+  var lines = editor.display.view.map(function(lineview) {
     return lineview.text.innerText;
   });
   tm = TuringMachine.buildMachine(lines);
   console.log(tm);
+}
 
-});
-
-var TAPE_SIZE = 25;
+var TAPE_SIZE = 50;
 
 function drawTape() {
   var tapeTable = document.getElementById("tape");
@@ -38,7 +43,9 @@ function drawTape() {
     var columnBottom = document.createElement("td");
     if (i == Math.floor(TAPE_SIZE / 2)) {
       console.log("foo");
-      columnTop.innerText = "|";
+      var center = document.createElement("center");
+      center.innerText = "|||";
+      columnTop.appendChild(center);
     }
     columnBottom.innerText = "_";
     columnBottom.classList.add("tapeCell");
@@ -47,15 +54,13 @@ function drawTape() {
   }
   tapeTable.appendChild(rowTop);
   tapeTable.appendChild(rowBottom);
-
-
-
 }
 
 drawTape();
 
 
 document.getElementById("startBtn").onclick = function() {
+  initTuringMachine();
   console.log("machine started");
   var inputStr = document.getElementById("tapeinput").value;
   // load input

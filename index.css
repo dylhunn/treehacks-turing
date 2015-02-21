@@ -82,7 +82,7 @@ button:focus {
 }
 
 td.tapeCell {
-  border: solid 1px white;
+  border: solid 1px rgba(255, 255, 255, 0.5);
   padding: 5px;
 }
 
@@ -91,11 +91,13 @@ td.tapeCell {
     font-size:13pt;
     padding-left:10px;
     padding-right:10px;
+    margin-left: 10px;
 }
 
 input:focus {
   outline: none;
 }
+
 
 
 
