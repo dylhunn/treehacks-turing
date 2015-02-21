@@ -40,7 +40,7 @@ function drawTape() {
       console.log("foo");
       columnTop.innerText = "|";
     }
-    columnBottom.innerText = i;
+    columnBottom.innerText = "a";
     columnBottom.classList.add("tapeCell");
     rowTop.appendChild(columnTop);
     rowBottom.appendChild(columnBottom);
@@ -57,7 +57,13 @@ drawTape();
 
 
 // get the start button
+var button = document.getElementById("startBtn");
+
 // add an event listener to start the simulation
+button.addEventListener("click", fuction(){
+ alert("started");
+});
+
 // get the input field's value to feed into the simulate function
 
 // reset_button

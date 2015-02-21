@@ -82,6 +82,7 @@ button:focus {
 
 td.tapeCell {
   border: solid 1px white;
+  padding: 5px;
 }
 
 
