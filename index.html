@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Website</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="google/fonts.css">
+  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>Turing Machine Simulator</h1>
+  </div>
+  <div class="content indented top">
+    <center>
+      <table id="tape"></table>
+    </center>
+  </div>
+  <div class="content indented">
+    <button>start</button><button>pause</button><button>step</button><button>reset</button>
+  </div>
+  <div class="content indented">
+    <textarea id="code"></textarea>
+  </div>
+
+  <script src="turing_machine.js"></script>
+  <script src="tape.js"></script>
+  <script src="state.js"></script>
+  <script src="transition.js"></script>
+  <script src="codemirror/lib/codemirror.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

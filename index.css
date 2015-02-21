@@ -1,0 +1,87 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+  background: rgb(95, 111, 128);
+  position: relative;
+  font-family: "Lato";
+}
+
+div.header {
+  position: fixed;
+  top: 0;
+
+  width: 100%;
+  background-color: rgba(25, 25, 27, 0.32);
+  margin: 0px;
+  padding: 10px;
+}
+
+#red-p {
+  color: red;
+}
+
+div.header h3.element.right {
+  float: right;
+  padding-top: 10px;
+  padding-right: 25px;
+}
+
+div.header h1, div.header h3 {
+  float: left;
+  margin: 0px;
+  color: rgb(97, 144, 190);
+}
+
+div.content {
+  padding: 10px 20px 10px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  margin: 20px 200px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+div.content.top {
+  margin: 84px 200px 20px 200px;
+}
+
+div.indented {
+  padding: 20px;
+}
+
+div.content h1, h2, h3, h4, h5 {
+  margin: 0px;
+}
+
+a, a:focus {
+  outline: none;
+  color: rgba(86, 174, 195, 0.84);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+pre.code {
+  margin-left: 15px;
+  padding: 20px;
+  width: 500px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+button {
+  background: rgba(59, 123, 195, 0.6);
+  border: none;
+  padding: 10px;
+  color: white;
+}
+
+button:hover {
+  background: rgba(59, 123, 195, 0.2);
+}
+
+button:focus {
+  outline: none;
+}
+
+td.tapeCell {
+  border: solid 1px white;
+}
+
+
