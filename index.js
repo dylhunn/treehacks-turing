@@ -40,7 +40,7 @@ function drawTape() {
       console.log("foo");
       columnTop.innerText = "|";
     }
-    columnBottom.innerText = "a";
+    columnBottom.innerText = "_";
     columnBottom.classList.add("tapeCell");
     rowTop.appendChild(columnTop);
     rowBottom.appendChild(columnBottom);
@@ -57,17 +57,20 @@ drawTape();
 
 document.getElementById("startBtn").onclick = function() {
   console.log("machine started");
+  var inputStr = document.getElementById("tapeinput").value;
+  // load input
+  tm.initialize(inputStr);
 }
 
-document.getElementById("startBtn").onclick = function() {
+document.getElementById("pauseBtn").onclick = function() {
   console.log("machine paused");
 }
 
-document.getElementById("startBtn").onclick = function() {
+document.getElementById("stepBtn").onclick = function() {
   console.log("machine stopped");
 }
 
-document.getElementById("startBtn").onclick = function() {
+document.getElementById("resetBtn").onclick = function() {
   console.log("machine reset");
 }
 

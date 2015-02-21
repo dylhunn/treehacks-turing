@@ -56,12 +56,13 @@
         machine.states[stateName].addTransition(match[2], match[3], match[4], match[5]);
         if (machine.states[match[5]] == undefined) {
           machine.addState(new State(match[5]));
+          console.log("adding the state " + match[5]);
         }
       }
       var haltRegex = /^(.*)\s*:\s*(0|1)/;
       if (haltRegex.test(line)) {
         var match = line.match(haltRegex);
-        machine.states[match[1]].setType(parseInt(match[2]))
+        machine.states[match[1]].setType(parseInt(match[2]));
       }
     });
     return machine;
