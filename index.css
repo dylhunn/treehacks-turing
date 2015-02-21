@@ -70,6 +70,7 @@ button {
   border: none;
   padding: 10px;
   color: white;
+  height: 50px;
 }
 
 button:hover {
@@ -84,5 +85,18 @@ td.tapeCell {
   border: solid 1px white;
   padding: 5px;
 }
+
+.tapeinputlook{
+    height:50px;
+    font-size:13pt;
+    padding-left:10px;
+    padding-right:10px;
+
+}
+
+input:focus {
+  outline: none;
+}
+
 
 

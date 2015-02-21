@@ -55,14 +55,21 @@ function drawTape() {
 drawTape();
 
 
+document.getElementById("startBtn").onclick = function() {
+  console.log("machine started");
+}
 
-// get the start button
-var button = document.getElementById("startBtn");
+document.getElementById("startBtn").onclick = function() {
+  console.log("machine paused");
+}
 
-// add an event listener to start the simulation
-button.addEventListener("click", fuction(){
- alert("started");
-});
+document.getElementById("startBtn").onclick = function() {
+  console.log("machine stopped");
+}
+
+document.getElementById("startBtn").onclick = function() {
+  console.log("machine reset");
+}
 
 // get the input field's value to feed into the simulate function
 
