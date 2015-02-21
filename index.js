@@ -1,5 +1,5 @@
 // get the textarea
-// add an on-change listener for it that calls TM build
+// add an on-change listener for it that calls machine build
 
   // if parsing this every time is too slow, we can
   // make the event listener just change an 'edited'
@@ -9,45 +9,63 @@
   // flag to false..... or something like that
 
 
-var tm;
+var machine;
 
 var textarea = document.getElementById("code");
 var editor = CodeMirror.fromTextArea(textarea, {
-  lineNumbers: true
+  lineNumbers: true,
+  height: "500"
 });
+
+editor.setSize("100%", "500px");
+
 
 
 // editor.on("change", function(event) {
-//   // tm = TuringMachine.buildMachine();
+//   // machine = TuringMachine.buildMachine();
 //   // console.log(event.display.input.value);
 //   initTuringMachine();
-//   console.log(tm);
+//   console.log(machine);
 // });
 
 function initTuringMachine() {
   var lines = editor.display.view.map(function(lineview) {
     return lineview.text.innerText;
   });
-  tm = TuringMachine.buildMachine(lines);
-  console.log(tm);
+  machine = TuringMachine.buildMachine(lines);
+  drawTape();
 }
 
-var TAPE_SIZE = 50;
+var TAPE_SIZE = 45;
 
 function drawTape() {
   var tapeTable = document.getElementById("tape");
+  while (tapeTable.firstChild) {
+    tapeTable.removeChild(tapeTable.firstChild);
+  }
   var rowTop = document.createElement("tr");
   var rowBottom = document.createElement("tr");
   for (var i = 0; i < TAPE_SIZE; i++) {
     var columnTop = document.createElement("td");
     var columnBottom = document.createElement("td");
-    if (i == Math.floor(TAPE_SIZE / 2)) {
-      console.log("foo");
+    var centerIndex = Math.floor(TAPE_SIZE / 2);
+    if (i == centerIndex) {
       var center = document.createElement("center");
       center.innerText = "|||";
       columnTop.appendChild(center);
     }
-    columnBottom.innerText = "_";
+
+    var innerCell = document.createElement("span");
+    if (machine) {
+      var tapeArray = machine.tape.tape;
+      var tapeHead = machine.tape.head;
+      var character = tapeArray[i - centerIndex + tapeHead] || "_";
+      if (character == " ") character = "_";
+      innerCell.innerText = character;
+    }
+    else innerCell.innerText = "_";
+    columnBottom.appendChild(innerCell);
+
     columnBottom.classList.add("tapeCell");
     rowTop.appendChild(columnTop);
     rowBottom.appendChild(columnBottom);
@@ -64,7 +82,7 @@ document.getElementById("startBtn").onclick = function() {
   console.log("machine started");
   var inputStr = document.getElementById("tapeinput").value;
   // load input
-  tm.initialize(inputStr);
+  machine.initialize(inputStr);
 }
 
 document.getElementById("pauseBtn").onclick = function() {
@@ -72,7 +90,8 @@ document.getElementById("pauseBtn").onclick = function() {
 }
 
 document.getElementById("stepBtn").onclick = function() {
-  console.log("machine stopped");
+  machine.step();
+  drawTape();
 }
 
 document.getElementById("resetBtn").onclick = function() {
@@ -86,14 +105,14 @@ document.getElementById("resetBtn").onclick = function() {
 
 
 // if we add subroutines, then we can have the
-// TMachine's map go to either States or Subroutines
+// machineachine's map go to either States or Subroutines
 // and we can use instanceof to determine which one it is
 
-// to simulate a subroutine, we run a TM with the current tape
+// to simulate a subroutine, we run a machine with the current tape
 // as its input, then we
 
 
-// simulate function simulates the given TM
+// simulate function simulates the given machine
 
 
 

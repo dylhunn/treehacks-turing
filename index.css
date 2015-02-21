@@ -84,14 +84,21 @@ button:focus {
 td.tapeCell {
   border: solid 1px rgba(255, 255, 255, 0.5);
   padding: 5px;
+  font-family: "Lucida Console", Monaco, monospace;
 }
 
-.tapeinputlook{
-    height:50px;
-    font-size:13pt;
-    padding-left:10px;
-    padding-right:10px;
-    margin-left: 10px;
+td.tapeCell span {
+  width: 15px;
+}
+
+.tapeinputlook {
+  border: none;
+  float: right;
+  height:50px;
+  font-size: 13pt;
+  padding-left:10px;
+  padding-right:10px;
+  margin-left: 10px;
 }
 
 input:focus {

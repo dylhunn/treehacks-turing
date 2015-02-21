@@ -40,8 +40,6 @@
     else this.type.moveLeft();
   }
 
-
-  // end-one 1 1 r end-one
   TuringMachine.buildMachine = function(lines) {
     var machine = new TuringMachine();
     lines.forEach(function(line) {
@@ -52,6 +50,9 @@
         var stateName = match[1];
         if (machine.states[stateName] == undefined) {
           machine.addState(new State(stateName));
+        }
+        if (machine.startStateName == undefined) {
+          machine.startStateName = stateName;
         }
         machine.states[stateName].addTransition(match[2].trim(), match[3], match[4], match[5]);
         if (machine.states[match[5]] == undefined) {
