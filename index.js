@@ -8,6 +8,8 @@
   // that function can then wait a second or two, then set the
   // flag to false..... or something like that
 
+var BINARY_PANINDROME_TM = "#binary palindrome\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+
 var CELL_SPACING = 5;
 
 var machine;
@@ -22,19 +24,18 @@ var editor = CodeMirror.fromTextArea(textarea, {
 
 editor.setSize("100%", "500px");
 
+editor.on("change", function(event) {
+  document.getElementById("saveBtn").disabled = false;
+});
 
-
-// editor.on("change", function(event) {
-//   // machine = TuringMachine.buildMachine();
-//
-//   initTuringMachine();
-//
-// });
-
-function initTuringMachine() {
-  var lines = editor.display.view.map(function(lineview) {
+function getCode() {
+  return editor.display.view.map(function(lineview) {
     return lineview.text.innerText;
   });
+}
+
+function initTuringMachine() {
+  var lines = getCode();
   machine = TuringMachine.buildMachine(lines);
   var inputStr = document.getElementById("tapeinput").value;
   machine.initialize(inputStr);
@@ -158,6 +159,42 @@ document.getElementById("resetBtn").onclick = function() {
   initTuringMachine();
   running = false;
 }
+
+document.getElementById("saveBtn").onclick = function() {
+  document.getElementById("saveBtn").disabled = true;
+  var code = getCode();
+  localStorage.setItem(code[0], code.join("\n"));
+}
+
+document.getElementById("loadBtn").onfocus = function() {
+  fillLoadDropdown();
+  document.getElementById("loadDropdown").hidden = false;
+}
+
+function fillLoadDropdown() {
+  var dropDown = document.getElementById("loadDropdown");
+  while(dropDown.firstChild) {
+    dropDown.removeChild(dropDown.firstChild);
+  }
+  for (var key in localStorage) {
+    var item = document.createElement("li");
+    item.innerText = key;
+    item.onclick = function(event) {
+      loadFile(event.toElement.innerHTML);
+    };
+    dropDown.appendChild(item);
+  }
+}
+
+function loadFile(key) {
+  // TODO
+  console.log("loading", key);
+}
+
+document.getElementById("loadBtn").onblur = function() {
+  document.getElementById("loadDropdown").hidden = true;
+}
+
 
 // get the input field's value to feed into the simulate function
 

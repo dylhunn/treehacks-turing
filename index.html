@@ -10,9 +10,20 @@
 
 <body>
 
-  <div class="header"><center>
-    <h1>Turing Machine Simulator</h1>
-  </center></div>
+  <div class="header">
+    <center>
+      <h1>Turing Machine Simulator</h1>
+    </center>
+    <h3 class="element right">
+      <button id="saveBtn" disabled>Save</button>
+      <button id="loadBtn">Load</button>
+      <ul id="loadDropdown" hidden>
+        <li>One</li>
+        <li>Two</li>
+        <li>Three</li>
+      </ul>
+    </h3>
+  </div>
   <div class="content indented top" id="tape-content">
     <span id="gradient-right"></span>
     <span id="gradient-left"></span>

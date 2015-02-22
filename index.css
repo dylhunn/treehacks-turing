@@ -21,9 +21,26 @@ div.header {
 }
 
 div.header h3.element.right {
-  float: right;
-  padding-top: 10px;
-  padding-right: 25px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 18px;
+  padding-right: 40px;
+}
+
+div.header h3.element.right button {
+  margin-left: 0px;
+  margin-top: -14px;
+  background: transparent;
+  font-size: 20px;
+}
+
+div.header h3.element.right button:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+div.header h3.element.right button:disabled {
+  color: rgba(255, 255, 255, 0.2);
 }
 
 div.header h1, div.header h3 {
@@ -71,7 +88,7 @@ pre.code {
 button {
   background: rgba(59, 123, 195, 0.6);
   border: none;
-  padding: 10px;
+  padding: 10px 18px;
   color: white;
   height: 50px;
   font-size: 15px;
@@ -167,5 +184,21 @@ span#status.reject {
   transition: all 0.2s linear;
 }
 
+#loadDropdown {
+  background: rgba(255, 255, 255, 0.3);
+  text-align: right;
+  list-style-type: none;
+  width: auto;
+  position: absolute;
+  right: 20px;
+  top: 40px;
+}
 
+#loadDropdown li {
+  padding: 5px 20px 5px 5px ;
+}
+
+#loadDropdown li:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
 
