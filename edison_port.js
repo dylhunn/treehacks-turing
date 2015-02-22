@@ -196,11 +196,13 @@ var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r en
 var TAPE_SIZE = 16;
 var myDisplayTapeArray = [];
 
-initTuringMachine();
-run(function() {
+function loop() {
   initTuringMachine();
-  run();
-});
+  run(loop);
+}
+
+initTuringMachine();
+loop();
 
 function initTuringMachine() {
   myDisplayTapeArray = [];
@@ -232,7 +234,9 @@ function drawTape(offset) {
 
 function run(callback) {
   step(callback);
-  setTimeout(run, 200); // delay
+  setTimeout(function() {
+      run(callback);
+  }, 300); // delay
 }
 
 function step(callback) {
