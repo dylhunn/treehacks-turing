@@ -202,3 +202,7 @@ span#status.reject {
   color: rgba(255, 255, 255, 0.5);
 }
 
+#errors {
+  padding-left: 30px;
+}
+

@@ -8,9 +8,11 @@
   // that function can then wait a second or two, then set the
   // flag to false..... or something like that
 
-var BINARY_PANINDROME_TM = "#palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+var BALANCED_PARENS_TM = "# balanced ()\n\n0 _ _ r accept\n0 ( { r 1\n0 ) _ r reject\n0 \\ / l 0\n0 / \\ r 0\n\n1 ( [ r 1\n1 ) / l 1\n1 [ \\ r 1\n1 _ _ r reject\n1 { \\ r 0\n1 \\ / l 1\n1 / \\ r 1\n\naccept : 1\nreject : 0";
+var ACCEPT_BINARY_TM = "# accept\n\nstart 1 _ r accept\nstart 0 _ r accept\nstart _ _ r\n\naccept : 1"
 
-var PRESETS = [BINARY_PANINDROME_TM];
+var PRESETS = [BINARY_PANINDROME_TM, BALANCED_PARENS_TM, ACCEPT_BINARY_TM];
 
 var CELL_SPACING = 5;
 
@@ -22,7 +24,8 @@ var textarea = document.getElementById("code");
 var editor = CodeMirror.fromTextArea(textarea, {
   lineNumbers: true,
   height: "500",
-  saveFunction: save
+  saveFunction: save,
+  theme: "peacock"
 });
 
 editor.setSize("100%", "500px");
@@ -39,8 +42,12 @@ function initializePresets() {
 }
 
 function initTuringMachine() {
+  document.getElementById("errors").innerText = "";
   var lines = editor.getValue().split("\n");
   machine = TuringMachine.buildMachine(lines);
+  if (typeof machine == "string") {
+    return document.getElementById("errors").innerText = machine;
+  }
   var inputStr = document.getElementById("tapeinput").value;
   machine.initialize(inputStr);
   var resultSpan = document.getElementById("status");
@@ -88,6 +95,11 @@ function drawTape(offset) {
   outerContainer.appendChild(innerContainer);
   var left = outerContainer.offsetWidth / 2 - innerContainer.offsetWidth / 2;
   innerContainer.style.left = left + "px";
+  if (innerContainer.offsetWidth < outerContainer.offsetWidth) {
+    TAPE_SIZE = (outerContainer.offsetWidth / innerContainer.offsetWidth) * TAPE_SIZE;
+    if (TAPE_SIZE % 2 == 0) TAPE_SIZE++;
+    drawTape();
+  }
 }
 
 drawTape();
@@ -96,7 +108,6 @@ window.onresize = drawTape;
 
 
 document.getElementById("startBtn").onclick = function() {
-  // initTuringMachine();
   document.getElementById("status").innerText = "running";
   document.getElementById("pauseBtn").disabled = false;
   document.getElementById("startBtn").disabled = true;
@@ -173,7 +184,6 @@ document.getElementById("saveBtn").onclick = function() {
 function save() {
   document.getElementById("saveBtn").disabled = true;
   var code = editor.getValue();
-  console.log(code.split("\n")[0]);
   localStorage.setItem(code.split("\n")[0], code);
 }
 
@@ -197,7 +207,6 @@ function fillLoadDropdown() {
 
 function loadFile(event) {
   var key = event.toElement.innerHTML;
-  console.log(localStorage.getItem(key));
   editor.setValue(localStorage.getItem(key));
   document.getElementById("loadDropdown").hidden = true;
 }

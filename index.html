@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="google/fonts.css">
   <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="monokai.css">
 </head>
 
 <body>
@@ -39,13 +40,15 @@
   </div>
   <div class="content indented">
     <textarea id="code"></textarea>
+    <div id="errors"></div>
   </div>
 
+  <script src="codemirror/lib/codemirror.js"></script>
+  <script src="codemirror/addon/mode/simple.js"></script>
   <script src="turing_machine.js"></script>
   <script src="tape.js"></script>
   <script src="state.js"></script>
   <script src="transition.js"></script>
-  <script src="codemirror/lib/codemirror.js"></script>
   <script src="index.js"></script>
 </body>
 </html>

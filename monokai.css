@@ -1,0 +1,21 @@
+/* Taken from the popular Visual Studio Vibrant Ink Schema */
+
+.cm-s-peacock.CodeMirror { background: rgba(140, 162, 211, 0.19); color: white; }
+.cm-s-peacock .CodeMirror-selected { background: rgba(32, 37, 45, 0.5) !important; }
+.cm-s-peacock.CodeMirror ::selection { background: rgba(32, 37, 45, 0.5); }
+.cm-s-peacock.CodeMirror ::-moz-selection { background: rgba(32, 37, 45, 0.99); }
+
+.cm-s-peacock .CodeMirror-gutters { background: rgba(47, 55, 64, 0.99); border-right: 1px solid transparent; }
+.cm-s-peacock .CodeMirror-guttermarker { color: transparent; }
+.cm-s-peacock .CodeMirror-guttermarker-subtle { color: transparent; }
+.cm-s-peacock .CodeMirror-linenumber { color: #d0d0d0; }
+.cm-s-peacock .CodeMirror-cursor { border-left: 1px solid white !important; }
+
+.cm-s-peacock .cm-keyword { color: rgb(70, 129, 179); }
+.cm-s-peacock .cm-atom { color: rgb(255, 95, 55); }
+.cm-s-peacock .cm-direction { color: rgb(39, 166, 166); }
+.cm-s-peacock span.cm-variable, .cm-s-vibrant span.cm-tag { color: rgb(70, 129, 179); }
+.cm-s-peacock .cm-comment { color: gray; font-weight: bold; }
+
+.cm-s-peacock .CodeMirror-activeline-background {background: #27282E !important;}
+.cm-s-peacock .CodeMirror-matchingbracket {outline:1px solid grey; color:white !important;}
