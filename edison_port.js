@@ -5,75 +5,27 @@ var Cylon = require('cylon');
 function writeToScreen(screen, message) {
   screen.setCursor(0,0);
   screen.write(message);
+  screen.setCursor(1, 7);
+  screen.write("^");
 }
+var my2;
 
 Cylon
   .robot({ name: 'LCD'})
   .connection('edison', { adaptor: 'intel-iot' })
   .device('screen', { driver: 'upm-jhd1313m1', connection: 'edison' })
   .on('ready', function(my) {
+    my2 = my;
     writeToScreen(my.screen, "testing");
   })
   .start();
 
-// PROCEDURAL CODE
 
-var INPUT_STR = "11100111"
-var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
-var TAPE_SIZE = 16;
-var myDisplayTapeArray = [];
-var running = true;
-
-initTuringMachine();
-run();
-
-function initTuringMachine() {
-  var lines = BINARY_PANINDROME_TM.split("\n");
-  machine = TuringMachine.buildMachine(lines);
-  machine.initialize(INPUT_STR);
-  drawTape();
-}
-
-function drawTape(offset) {
-  if (!offset) offset = 0;
-  myDisplayTapeArray = []; // reset the display
-  for (var i = 0; i < TAPE_SIZE; i++) {
-    var centerIndex = Math.floor(TAPE_SIZE / 2);
-    var currentCellText;
-    if (machine) {
-      var tapeArray = machine.tape.tape;
-      var tapeHead = machine.tape.head;
-      var character = tapeArray[i - centerIndex + tapeHead + offset] || "_";
-      if (character == " ") character = "_";
-      currentCellText = character;
-    }
-    else currentCellText = "_";
-    myDisplayTapeArray.push(currentCellText);
-  }
-  var tapestr = myDisplayTapeArray.join("");
-  writeToScreen(my.screen, tapestr);
-}
-
-function run() {
-  step();
-  setTimeout(function() {
-    if (running) run();
-  }, 200); // delay
-}
-
-function step() {
-  var direction = machine.getNextDirection();
-  var result = machine.step();
-  if (result != undefined) stop(result);
-  drawTape(direction == "r" ? -1 : 1);
-  setTimeout(function() {
-    drawTape();
-  }, 200);
-}
 
 // TURING MACHINE CLASS
 
 var DirectionEnum = { RIGHT: "r", LEFT: "l" };
+var machine;
 
 var TuringMachine = function() {
   this.states = {};
@@ -81,48 +33,48 @@ var TuringMachine = function() {
   this.currentStateName = undefined;
   this.tape = undefined;
   this.steps = 0;
-}
+};
 
 TuringMachine.prototype.addState = function(stateToAdd) {
   this.states[stateToAdd.name] = stateToAdd;
-}
+};
 
 TuringMachine.prototype.getState = function(nameToGet){
   return this.states[nameToGet];
-}
+};
 
 TuringMachine.prototype.setStart = function(nameOfStarting){ // TODO: what if start does not exist?
   this.startStateName = nameOfStarting;
-}
+};
 
 TuringMachine.prototype.initialize = function(input) {
   this.steps = 0;
   this.currentStateName = this.startStateName;
   this.tape = new Tape();
   this.tape.setInput(input);
-}
+};
 
 TuringMachine.prototype.getNextDirection = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
-  if (transition == undefined) transition = currentState.transitions["*"];
+  if (transition === undefined) transition = currentState.transitions["*"];
   return transition ? transition.direction : false;
-}
+};
 
 TuringMachine.prototype.step = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
-  if (transition == undefined) transition = currentState.transitions["*"];
-  if (transition == undefined) return false;
+  if (transition === undefined) transition = currentState.transitions["*"];
+  if (transition === undefined) return false;
   this.currentStateName = transition.destination;
   this.tape.write((transition.write == "*") ? currentSymbol : transition.write);
   if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
   else this.tape.moveLeft();
   currentState = this.getState(this.currentStateName);
   if (currentState.isHalting()) return currentState.type;
-}
+};
 
 TuringMachine.buildMachine = function(lines) {
   var machine = new TuringMachine();
@@ -135,19 +87,19 @@ TuringMachine.buildMachine = function(lines) {
     if (transitionRegex.test(line)) {
       var match = line.match(transitionRegex);
       var stateName = match[1];
-      if (machine.states[stateName] == undefined) {
+      if (machine.states[stateName] === undefined) {
         machine.addState(new State(stateName));
       }
-      if (machine.startStateName == undefined) {
+      if (machine.startStateName === undefined) {
         machine.startStateName = stateName;
       }
       machine.states[stateName].addTransition(match[2].trim(), match[3], match[4], match[5]);
-      if (machine.states[match[5]] == undefined) {
+      if (machine.states[match[5]] === undefined) {
         machine.addState(new State(match[5]));
       }
     }
     else if (haltRegex.test(line)) {
-      var match = line.match(haltRegex);
+      match = line.match(haltRegex);
       machine.states[match[1]].setType(parseInt(match[2]));
     }
     else return "error: syntax error on line " + (i + 1);
@@ -229,4 +181,59 @@ function Transition(read, write, direction, destination) {
   this.write = write;
   this.direction = direction;
   this.destination = destination;
+}
+
+// PROCEDURAL CODE
+
+var INPUT_STR = "11100111";
+var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+var TAPE_SIZE = 16;
+var myDisplayTapeArray = [];
+var running = true;
+
+initTuringMachine();
+run();
+
+function initTuringMachine() {
+  var lines = BINARY_PANINDROME_TM.split("\n");
+   machine = TuringMachine.buildMachine(lines);
+  machine.initialize(INPUT_STR);
+  drawTape();
+}
+
+function drawTape(offset) {
+  if (!offset) offset = 0;
+  myDisplayTapeArray = []; // reset the display
+  for (var i = 0; i < TAPE_SIZE; i++) {
+    var centerIndex = Math.floor(TAPE_SIZE / 2);
+    var currentCellText;
+    if (machine!==undefined) {
+      var tapeArray = machine.tape.tape;
+      var tapeHead = machine.tape.head;
+      var character = tapeArray[i - centerIndex + tapeHead + offset] || "_";
+      if (character == " ") character = "_";
+      currentCellText = character;
+    }
+    else currentCellText = "_";
+    myDisplayTapeArray.push(currentCellText);
+  }
+  var tapestr = myDisplayTapeArray.join("");
+  writeToScreen(my2.screen, tapestr);
+}
+
+function run() {
+  step();
+  setTimeout(function() {
+    if (running) run();
+  }, 200); // delay
+}
+
+function step() {
+  var direction = machine.getNextDirection();
+  var result = machine.step();
+  if (result !== undefined) stop(result);
+  drawTape(direction == "r" ? -1 : 1);
+  setTimeout(function() {
+    drawTape();
+  }, 200);
 }
