@@ -161,8 +161,9 @@ document.getElementById("saveBtn").onclick = function() {
 
 function save() {
   document.getElementById("saveBtn").disabled = true;
-  var code = getCode();
-  localStorage.setItem(code[0], code.join("\n"));
+  var code = editor.getValue();
+  console.log(code.split("\n")[0]);
+  localStorage.setItem(code.split("\n")[0], code);
 }
 
 document.getElementById("loadBtn").onfocus = function() {
@@ -179,14 +180,16 @@ function fillLoadDropdown() {
     var item = document.createElement("li");
     item.innerText = key;
     item.onclick = function(event) {
-      loadFile(event.toElement.innerHTML);
+      loadFile();
     };
     dropDown.appendChild(item);
   }
 }
 
-function loadFile(key) {
-
+function loadFile(event) {
+  var key = event.toElement.innerHTML;
+  console.log(localStorage.getItem(key));
+  editor.setValue(localStorage.getItem(key));
 }
 
 document.getElementById("loadBtn").onblur = function() {
