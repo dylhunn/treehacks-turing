@@ -8,7 +8,9 @@
   // that function can then wait a second or two, then set the
   // flag to false..... or something like that
 
-var BINARY_PANINDROME_TM = "#binary palindrome\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+var BINARY_PANINDROME_TM = "#palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+
+var PRESETS = [BINARY_PANINDROME_TM];
 
 var CELL_SPACING = 5;
 
@@ -28,6 +30,13 @@ editor.setSize("100%", "500px");
 editor.on("change", function(event) {
   document.getElementById("saveBtn").disabled = false;
 });
+
+function initializePresets() {
+  for (var i = 0; i < PRESETS.length; i++) {
+    var preset = PRESETS[i];
+    localStorage.setItem(preset.split("\n")[0], preset);
+  }
+}
 
 function initTuringMachine() {
   var lines = editor.getValue().split("\n");
@@ -168,7 +177,7 @@ function save() {
 
 document.getElementById("loadBtn").onfocus = function() {
   fillLoadDropdown();
-  document.getElementById("loadDropdown").hidden = false;
+  document.getElementById("loadDropdown").hidden = !document.getElementById("loadDropdown").hidden;
 }
 
 function fillLoadDropdown() {
@@ -179,9 +188,7 @@ function fillLoadDropdown() {
   for (var key in localStorage) {
     var item = document.createElement("li");
     item.innerText = key;
-    item.onclick = function(event) {
-      loadFile();
-    };
+    item.addEventListener("click", loadFile);
     dropDown.appendChild(item);
   }
 }
@@ -190,12 +197,10 @@ function loadFile(event) {
   var key = event.toElement.innerHTML;
   console.log(localStorage.getItem(key));
   editor.setValue(localStorage.getItem(key));
-}
-
-document.getElementById("loadBtn").onblur = function() {
   document.getElementById("loadDropdown").hidden = true;
 }
 
+initializePresets();
 
 // get the input field's value to feed into the simulate function
 
