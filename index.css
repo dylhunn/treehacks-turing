@@ -192,6 +192,7 @@ span#status.reject {
   position: absolute;
   right: 20px;
   top: 40px;
+  padding: 10px;
 }
 
 #loadDropdown li {
