@@ -1,5 +1,3 @@
-var DirectionEnum = { RIGHT: "r", LEFT: "l" };
-
 var TuringMachine = function() {
   this.states = {};
   this.startStateName = undefined;
@@ -16,7 +14,7 @@ TuringMachine.prototype.getState = function(nameToGet){
   return this.states[nameToGet];
 }
 
-TuringMachine.prototype.setStart = function(nameOfStarting){ // TODO: what if start does not exist?
+TuringMachine.prototype.setStart = function(nameOfStarting){
   this.startStateName = nameOfStarting;
 }
 
@@ -32,7 +30,7 @@ TuringMachine.prototype.getNextDirection = function() {
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
   if (transition == undefined) transition = currentState.transitions["*"];
-  return transition ? transition.direction : false;
+  return transition ? transition.direction : 0;
 }
 
 TuringMachine.prototype.step = function() {
@@ -43,8 +41,7 @@ TuringMachine.prototype.step = function() {
   if (transition == undefined) return false;
   this.currentStateName = transition.destination;
   this.tape.write((transition.write == "*") ? currentSymbol : transition.write);
-  if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
-  else this.tape.moveLeft();
+  this.tape.move(transition.direction);
   currentState = this.getState(this.currentStateName);
   if (currentState.isHalting()) return currentState.type;
 }
@@ -79,32 +76,3 @@ TuringMachine.buildMachine = function(lines) {
   }
   return machine;
 }
-
-// window.TuringMachine = TuringMachine;
-
-
-
-
-// class TuringMachine
-  // has a map 'states' that maps state names
-  // to state instances
-
-  // has a start state, which is the name of the start state
-  // has a current state (name)
-  // has a Tape instance
-  // has a steps number
-
-  // has a step function that simulates one step
-    // remember to increment step count
-  // has an initialize_simulation function
-    // takes an input string. starts by constructing the tape
-    // takes an optional tape head index (for subroutines)
-    // takes a speed (either a flag to go slowly or an actual speed)
-    // sets steps count to 0
-    // returns the type of the first halting state reached
-
-  // addState
-  // getState
-  // setStart
-
-// buildTM function takes TM code and builds a TM instance

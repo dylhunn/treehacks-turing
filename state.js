@@ -7,6 +7,7 @@ function State(name) {
 }
 
 State.prototype.addTransition = function(read, write, direction, state) {
+  direction = direction == "r" ? -1 : 1;
   this.transitions[read] = new Transition(read, write, direction, state);
 }
 
@@ -21,29 +22,3 @@ State.prototype.setType = function(type) {
 State.prototype.isHalting = function() {
   return this.type != NONE;
 }
-
-
-
-//   this.transtions["state-name"];
-//   this.transtions["state-name"] = new Transition("a", "b", "other-state");
-// }
-
-
-
-
-// class State
-  // has a map 'transitions' from characters to read
-  // to Transition instances
-  // has a name
-
-  // has type string "1" or "0", or somehting else if
-    // a subroutine state, e.g. "even" or "odd"
-    // "" for non-halting
-  // has a function isHalting() which checks if the state
-  // is either accepting or rejecting.
-
-  // constructor takes a name
-
-  // setType (by default NONE)
-  // addTransition
-  // getTransition (if no transition, the TM rejects)

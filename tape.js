@@ -11,6 +11,10 @@ Tape.prototype.read = function() {
   return this.tape[this.head];
 }
 
+Tape.prototype.move = function(direction) {
+  (direction == -1) ? this.moveRight() : this.moveLeft();
+}
+
 Tape.prototype.moveLeft = function() {
   if (this.head == 0) this.tape.unshift("_");
   else this.head--;
