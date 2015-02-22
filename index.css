@@ -206,3 +206,13 @@ span#status.reject {
   padding-left: 30px;
 }
 
+#step-count {
+  font-size: 24px;
+  vertical-align: middle;
+  padding-left: 10px;
+}
+
+.highlighted {
+  background: rgb(64, 75, 91);
+}
+
