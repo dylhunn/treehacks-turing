@@ -70,7 +70,9 @@ TuringMachine.buildMachine = function(lines) {
     }
     else if (haltRegex.test(line)) {
       var match = line.match(haltRegex);
-      machine.states[match[1]].setType(parseInt(match[2]));
+      console.log(machine.states, match[1]);
+      var state = machine.states[match[1]];
+      if (state) state.setType(parseInt(match[2]));
     }
     else return "error: syntax error on line " + (i + 1);
   }
