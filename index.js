@@ -157,6 +157,8 @@ function stop(result) {
   running = false;
   document.getElementById("resetBtn").disabled = false;
   document.getElementById("pauseBtn").disabled = true;
+  document.getElementById("startBtn").disabled = true;
+  document.getElementById("stepBtn").disabled = true;
 }
 
 document.getElementById("resetBtn").onclick = function() {
