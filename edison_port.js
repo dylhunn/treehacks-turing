@@ -28,68 +28,6 @@ Cylon
   })
   .start();
 
-// PROCEDURAL CODE
-
-var INPUT_STR = "11100111"
-var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
-var TAPE_SIZE = 16;
-var myDisplayTapeArray = [];
-var running = true;
-
-initTuringMachine();
-run();
-
-function initTuringMachine() {
-  var lines = BINARY_PANINDROME_TM.split("\n");
-  machine = TuringMachine.buildMachine(lines);
-  machine.initialize(INPUT_STR);
-  drawTape();
-}
-
-function drawTape(offset) {
-  if (!offset) offset = 0;
-  myDisplayTapeArray = []; // reset the display
-  for (var i = 0; i < TAPE_SIZE; i++) {
-    var centerIndex = Math.floor(TAPE_SIZE / 2);
-    var currentCellText;
-    if (machine) {
-      var tapeArray = machine.tape.tape;
-      var tapeHead = machine.tape.head;
-      var character = tapeArray[i - centerIndex + tapeHead + offset] || "_";
-      if (character == " ") character = "_";
-      currentCellText = character;
-    }
-    else currentCellText = "_";
-    myDisplayTapeArray.push(currentCellText);
-  }
-  var tapestr = myDisplayTapeArray.join("");
-  writeToScreen(my2.screen, tapestr);
-}
-
-function run() {
-  step();
-  setTimeout(function() {
-    if (running) run();
-  }, 200); // delay
-}
-
-function restart(result) {
-  statusTextRight = result ? "accept" : "reject";
-  initTuringMachine();
-  run();
-}
-
-function step() {
-  var direction = machine.getNextDirection();
-  var result = machine.step();
-  if (result !== undefined) {
-    restart(result);
-  }
-  drawTape(direction == "r" ? -1 : 1);
-  setTimeout(function() {
-    drawTape();
-  }, 200);
-}
 
 // TURING MACHINE CLASS
 
@@ -249,4 +187,64 @@ function Transition(read, write, direction, destination) {
   this.write = write;
   this.direction = direction;
   this.destination = destination;
+}
+
+// PROCEDURAL CODE
+
+var INPUT_STR = "11100111"
+var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
+var TAPE_SIZE = 16;
+var myDisplayTapeArray = [];
+var running = true;
+
+while(true) {
+  initTuringMachine();
+  run();
+}
+
+function initTuringMachine() {
+  myDisplayTapeArray = [];
+  var lines = BINARY_PANINDROME_TM.split("\n");
+  machine = TuringMachine.buildMachine(lines);
+  machine.initialize(INPUT_STR);
+  drawTape();
+}
+
+function drawTape(offset) {
+  if (!offset) offset = 0;
+  myDisplayTapeArray = []; // reset the display
+  for (var i = 0; i < TAPE_SIZE; i++) {
+    var centerIndex = Math.floor(TAPE_SIZE / 2);
+    var currentCellText;
+    if (machine) {
+      var tapeArray = machine.tape.tape;
+      var tapeHead = machine.tape.head;
+      var character = tapeArray[i - centerIndex + tapeHead + offset] || "_";
+      if (character == " ") character = "_";
+      currentCellText = character;
+    }
+    else currentCellText = "_";
+    myDisplayTapeArray.push(currentCellText);
+  }
+  var tapestr = myDisplayTapeArray.join("");
+  writeToScreen(my2.screen, tapestr);
+}
+
+function run() {
+  step();
+  setTimeout(function() {
+    if (running) run();
+  }, 200); // delay
+}
+
+function step() {
+  var direction = machine.getNextDirection();
+  var result = machine.step();
+  if (result !== undefined) {
+    statusTextRight = result ? "accepted" : "rejected";
+  }
+  drawTape(direction == "r" ? -1 : 1);
+  setTimeout(function() {
+    drawTape();
+  }, 200);
 }
