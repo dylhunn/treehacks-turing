@@ -2,9 +2,20 @@
 
 var Cylon = require('cylon');
 
+var statusTextLeft = "running";
+var statusTextRight = " <first>";
+var my2;
+var machine;
+
 function writeToScreen(screen, message) {
   screen.setCursor(0,0);
   screen.write(message);
+  screen.setCursor(1,7);
+  screen.write("^");
+  screen.setCursor(1,0);
+  screen.write(statusTextLeft);
+  screen.setCursor(1,8);
+  screen.write(statusTextRight);
 }
 
 Cylon
@@ -12,7 +23,8 @@ Cylon
   .connection('edison', { adaptor: 'intel-iot' })
   .device('screen', { driver: 'upm-jhd1313m1', connection: 'edison' })
   .on('ready', function(my) {
-    writeToScreen(my.screen, "testing");
+    my2 = my;
+    writeToScreen(my.screen, "initializing...");
   })
   .start();
 
@@ -51,7 +63,7 @@ function drawTape(offset) {
     myDisplayTapeArray.push(currentCellText);
   }
   var tapestr = myDisplayTapeArray.join("");
-  writeToScreen(my.screen, tapestr);
+  writeToScreen(my2.screen, tapestr);
 }
 
 function run() {
@@ -61,10 +73,18 @@ function run() {
   }, 200); // delay
 }
 
+function restart(result) {
+  statusTextRight = result ? "accept" : "reject";
+  initTuringMachine();
+  run();
+}
+
 function step() {
   var direction = machine.getNextDirection();
   var result = machine.step();
-  if (result != undefined) stop(result);
+  if (result !== undefined) {
+    restart(result);
+  }
   drawTape(direction == "r" ? -1 : 1);
   setTimeout(function() {
     drawTape();
@@ -106,7 +126,7 @@ TuringMachine.prototype.getNextDirection = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
-  if (transition == undefined) transition = currentState.transitions["*"];
+  if (transition === undefined) transition = currentState.transitions["*"];
   return transition ? transition.direction : false;
 }
 
@@ -114,8 +134,8 @@ TuringMachine.prototype.step = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
-  if (transition == undefined) transition = currentState.transitions["*"];
-  if (transition == undefined) return false;
+  if (transition === undefined) transition = currentState.transitions["*"];
+  if (transition === undefined) return false;
   this.currentStateName = transition.destination;
   this.tape.write((transition.write == "*") ? currentSymbol : transition.write);
   if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
@@ -135,14 +155,14 @@ TuringMachine.buildMachine = function(lines) {
     if (transitionRegex.test(line)) {
       var match = line.match(transitionRegex);
       var stateName = match[1];
-      if (machine.states[stateName] == undefined) {
+      if (machine.states[stateName] === undefined) {
         machine.addState(new State(stateName));
       }
-      if (machine.startStateName == undefined) {
+      if (machine.startStateName === undefined) {
         machine.startStateName = stateName;
       }
       machine.states[stateName].addTransition(match[2].trim(), match[3], match[4], match[5]);
-      if (machine.states[match[5]] == undefined) {
+      if (machine.states[match[5]] === undefined) {
         machine.addState(new State(match[5]));
       }
     }
@@ -192,35 +212,35 @@ function Tape() {
 
 Tape.prototype.write = function(character) {
   this.tape[this.head] = character;
-}
+};
 
 Tape.prototype.read = function() {
   return this.tape[this.head];
-}
+};
 
 Tape.prototype.moveLeft = function() {
   if (this.head == 0) this.tape.unshift("_");
   else this.head--;
-}
+};
 
 Tape.prototype.moveRight = function() {
   this.head++;
   if (this.head >= this.tape.length) {
     this.tape.push("_");
   }
-}
+};
 
 Tape.prototype.getInput = function() {
   return this.tape.join("");
-}
+};
 
 Tape.prototype.setInput = function(input) {
   this.tape = input.split("");
-}
+};
 
 Tape.prototype.setHead = function(head) {
   this.head = head;
-}
+};
 
 // TRANSITION CLASS
 
