@@ -19,7 +19,8 @@ var running = false;
 var textarea = document.getElementById("code");
 var editor = CodeMirror.fromTextArea(textarea, {
   lineNumbers: true,
-  height: "500"
+  height: "500",
+  saveFunction: save
 });
 
 editor.setSize("100%", "500px");
@@ -28,14 +29,8 @@ editor.on("change", function(event) {
   document.getElementById("saveBtn").disabled = false;
 });
 
-function getCode() {
-  return editor.display.view.map(function(lineview) {
-    return lineview.text.innerText;
-  });
-}
-
 function initTuringMachine() {
-  var lines = getCode();
+  var lines = editor.getValue().split("\n");
   machine = TuringMachine.buildMachine(lines);
   var inputStr = document.getElementById("tapeinput").value;
   machine.initialize(inputStr);
@@ -161,6 +156,10 @@ document.getElementById("resetBtn").onclick = function() {
 }
 
 document.getElementById("saveBtn").onclick = function() {
+ save();
+}
+
+function save() {
   document.getElementById("saveBtn").disabled = true;
   var code = getCode();
   localStorage.setItem(code[0], code.join("\n"));
@@ -187,8 +186,7 @@ function fillLoadDropdown() {
 }
 
 function loadFile(key) {
-  // TODO
-  console.log("loading", key);
+
 }
 
 document.getElementById("loadBtn").onblur = function() {
