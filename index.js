@@ -42,6 +42,7 @@ function initializePresets() {
 }
 
 function initTuringMachine() {
+  document.getElementById("step-count").innerText = "0";
   document.getElementById("errors").innerText = "";
   var lines = editor.getValue().split("\n");
   machine = TuringMachine.buildMachine(lines);
@@ -141,6 +142,7 @@ function run() {
 }
 
 function step() {
+  document.getElementById("step-count").innerText = parseInt(document.getElementById("step-count").innerText) + 1;
   var direction = machine.getNextDirection();
   var result = machine.step();
   if (result != undefined) stop(result);
