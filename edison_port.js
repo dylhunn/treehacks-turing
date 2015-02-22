@@ -195,12 +195,12 @@ var INPUT_STR = "11100111"
 var BINARY_PANINDROME_TM = "# palindrome\n\nstart 0 _ r end-zero\nstart 1 _ r end-one\nstart _ _ r accept\n\nend-zero 0 0 r end-zero\nend-zero 1 1 r end-zero\nend-zero _ _ l read-zero\n\nend-one 0 0 r end-one\nend-one 1 1 r end-one\nend-one _ _ l read-one\n\nread-zero 0 _ l go-home\nread-zero 1 _ r reject\nread-zero _ _ r accept\n\nread-one 1 _ l go-home\nread-one 0 _ r reject\nread-one _ _ r accept\n\ngo-home 0 0 l go-home\ngo-home 1 1 l go-home\ngo-home _ _ r start\n\naccept : 1\nreject : 0";
 var TAPE_SIZE = 16;
 var myDisplayTapeArray = [];
-var running = true;
 
-while(true) {
+initTuringMachine();
+run(function() {
   initTuringMachine();
   run();
-}
+});
 
 function initTuringMachine() {
   myDisplayTapeArray = [];
@@ -230,18 +230,17 @@ function drawTape(offset) {
   writeToScreen(my2.screen, tapestr);
 }
 
-function run() {
-  step();
-  setTimeout(function() {
-    if (running) run();
-  }, 200); // delay
+function run(callback) {
+  step(callback);
+  setTimeout(run, 200); // delay
 }
 
-function step() {
+function step(callback) {
   var direction = machine.getNextDirection();
   var result = machine.step();
   if (result !== undefined) {
     statusTextRight = result ? "accepted" : "rejected";
+    callback();
   }
   drawTape(direction == "r" ? -1 : 1);
   setTimeout(function() {
