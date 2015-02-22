@@ -1,4 +1,4 @@
-var NONE = NaN;
+var NONE = undefined;
 
 function State(name) {
   this.transitions = {};

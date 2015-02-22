@@ -27,6 +27,13 @@ TuringMachine.prototype.initialize = function(input) {
   this.tape.setInput(input);
 }
 
+TuringMachine.prototype.getNextDirection = function() {
+  var currentState = this.getState(this.currentStateName);
+  var currentSymbol = this.tape.read();
+  var transition = currentState.transitions[currentSymbol];
+  return transition ? transition.direction : false;
+}
+
 TuringMachine.prototype.step = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
@@ -36,6 +43,8 @@ TuringMachine.prototype.step = function() {
   this.tape.write(transition.write);
   if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
   else this.tape.moveLeft();
+  currentState = this.getState(this.currentStateName);
+  if (currentState.isHalting()) return currentState.type;
 }
 
 TuringMachine.buildMachine = function(lines) {

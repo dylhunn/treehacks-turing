@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Website</title>
+  <title>Turing Machine Simulator</title>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="google/fonts.css">
   <link rel="stylesheet" href="codemirror/lib/codemirror.css">
@@ -10,18 +10,21 @@
 
 <body>
 
-  <div class="header">
+  <div class="header"><center>
     <h1>Turing Machine Simulator</h1>
-  </div>
-  <div class="content indented top">
-    <center>
+  </center></div>
+  <div class="content indented top" id="tape-content">
+    <span id="gradient-right"></span>
+    <span id="gradient-left"></span>
+    <center><span id="tape-head">&#9660;</span></center>
+    <div id="tape-container">
       <table cellspacing="5px" id="tape"></table>
-    </center>
+    </div>
   </div>
   <div class="content indented">
     <input type="text" id="tapeinput" class="tapeinputlook"></input>
-    <button id="startBtn">start</button><button id="pauseBtn">pause</button><button id="stepBtn">step</button><button id="resetBtn">reset</button>
-    <span id="status"></span>
+    <span id="status">paused</span>
+    <button id="startBtn" disabled>play</button><button id="pauseBtn" disabled>pause</button><button id="stepBtn" disabled>step</button><button id="resetBtn">load</button>
   </div>
   <div class="content indented">
     <textarea id="code"></textarea>

@@ -9,9 +9,9 @@ html, body {
 div.header {
   position: fixed;
   top: 0;
-
+  z-index: 1000000;
   width: 100%;
-  background-color: rgba(25, 25, 27, 0.32);
+  background-color: rgba(25, 25, 27, 0.5);
   margin: 0px;
   padding: 10px;
 }
@@ -27,20 +27,23 @@ div.header h3.element.right {
 }
 
 div.header h1, div.header h3 {
-  float: left;
   margin: 0px;
-  color: rgb(97, 144, 190);
+  color: rgb(255, 255, 255);
 }
 
 div.content {
+  position: relative;
+  overflow: hidden;
+  min-width: 534px;
   padding: 10px 20px 10px 20px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(47, 55, 64, 1);
   margin: 20px 200px;
   color: rgba(255, 255, 255, 0.75);
 }
 
 div.content.top {
   margin: 84px 200px 20px 200px;
+  height: 75px;
 }
 
 div.indented {
@@ -71,6 +74,7 @@ button {
   padding: 10px;
   color: white;
   height: 50px;
+  font-size: 15px;
 }
 
 button:hover {
@@ -79,6 +83,10 @@ button:hover {
 
 button:focus {
   outline: none;
+}
+
+button:disabled {
+  background: rgba(59, 123, 195, 0.1);
 }
 
 td.tapeCell {
@@ -105,6 +113,59 @@ input:focus {
   outline: none;
 }
 
+span#status {
+  float: right;
+  height: 22px;
+  padding: 15px;
+  background-color: rgba(95, 111, 128, 0.67);
+}
+
+span#status.accept {
+  background-color: rgba(118, 211, 144, 0.44);
+}
+
+span#status.reject {
+  background-color: rgba(240, 64, 64, 0.44);
+}
+
+#gradient-right {
+  background: red;
+  height: 100%;
+  position: absolute;
+  width: 50px;
+  right: 0;
+  top: 0;
+  z-index: 100000;
+
+  background: -webkit-linear-gradient(right, rgba(47, 55, 64, 1), rgba(47, 55, 64, 0.001)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(left, rgba(47, 55, 64, 1), rgba(47, 55, 64, 0.001)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(left, rgba(47, 55, 64, 1), rgba(47, 55, 64, 0.001)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to left, rgba(47, 55, 64, 1) , rgba(47, 55, 64, 0.001)); /* Standard syntax */
+
+}
+
+#gradient-left {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50px;
+  z-index: 100000;
+
+  background: -webkit-linear-gradient(left, rgba(47, 55, 64, 1), rgba(47, 55, 64, 0.001)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, rgba(47, 55, 64, 1), rgba(47, 55, 64, 0.001)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, rgba(47, 55, 64, 1), rgba(47, 55, 64, 0.001)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, rgba(47, 55, 64, 1) , rgba(47, 55, 64, 0.001)); /* Standard syntax */
+}
+
+#tape-container {
+  position: absolute;
+
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
 
 
 
