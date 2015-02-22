@@ -31,6 +31,7 @@ TuringMachine.prototype.getNextDirection = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
+  if (transition == undefined) transition = currentState.transitions["*"];
   return transition ? transition.direction : false;
 }
 
@@ -38,17 +39,14 @@ TuringMachine.prototype.step = function() {
   var currentState = this.getState(this.currentStateName);
   var currentSymbol = this.tape.read();
   var transition = currentState.transitions[currentSymbol];
+  if (transition == undefined) transition = currentState.transitions["*"];
   if (transition == undefined) return false;
   this.currentStateName = transition.destination;
-  this.tape.write(transition.write);
+  this.tape.write((transition.write == "*") ? currentSymbol : transition.write);
   if (transition.direction == DirectionEnum.RIGHT) this.tape.moveRight();
   else this.tape.moveLeft();
   currentState = this.getState(this.currentStateName);
   if (currentState.isHalting()) return currentState.type;
-}
-
-function escapeRegExp(str) {
-  return str.replace(/[\\|(|)|\/]/g, "\\$&");
 }
 
 TuringMachine.buildMachine = function(lines) {
