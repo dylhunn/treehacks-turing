@@ -70,7 +70,6 @@ TuringMachine.buildMachine = function(lines) {
     }
     else if (haltRegex.test(line)) {
       var match = line.match(haltRegex);
-      console.log(machine.states, match[1]);
       var state = machine.states[match[1]];
       if (state) state.setType(parseInt(match[2]));
     }
